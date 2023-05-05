@@ -1,0 +1,121 @@
+
+<mat-card>
+	<p mat-card-title style="margin-left: 20%;">Generate custom report for the uploaded excel file.</p>
+
+	<mat-divider></mat-divider>
+
+	<mat-card-content>
+		<br><br>
+		<mat-form-field style="width: 60%;margin-left: 20%;">
+			<mat-label>Please upload a .exe file or a .csv file</mat-label>
+			<button mat-icon-button matPrefix (click)="f_input.click()">
+        <mat-icon>attach_file</mat-icon>
+      </button>
+			<input type="text" readonly matInput [formControl]="display" />
+			<input
+        type="file"
+        multiple
+        hidden
+        #f_input
+        (change)="uploadData($event)"
+      />
+			<mat-error>this field is required</mat-error>
+      <mat-hint align="end">The attributes in the excel sheet must be same as defined in template.</mat-hint>
+		</mat-form-field>
+
+    <mat-form-field style="width: 60%; margin-left: 20%;">
+      <mat-label>Select a template</mat-label>
+      <mat-select (selectionChange)="onReportNameSelection($event)">
+        <mat-option *ngFor="let reportName of reportNames" [value]="reportName">
+          {{ reportName }}
+        </mat-option>
+      </mat-select>
+      <mat-hint align="end">Check my templates before selecting.</mat-hint>
+    </mat-form-field>
+		<br><br>
+	</mat-card-content>
+
+		<mat-divider></mat-divider>
+
+</mat-card>
+<div class="d-flex justify-content-center">
+<ng-container *ngIf="selectedObject && AttributeList && AttributeList.length > 0">
+  <mat-card>
+    <mat-card-header>
+      <div class="row">
+        <div class="col-md-6" >
+          <mat-card-title>Selected Template is {{selectedReportName}}</mat-card-title>
+        </div>
+        <div class="col-md-6">
+          <mat-card-title>Selected Excel sheet is {{sheetName}}</mat-card-title>
+        </div>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <div class="col-md-6">
+          <ng-container *ngIf="selectedObject">
+            <p>Available Table list in selected template:</p>
+            <ul *ngIf="selectedObject.tables">
+              <li *ngFor="let table of selectedObject.tables">
+                <ul>
+                  <p>{{table.tableName}}</p>
+                  <li *ngFor="let tableField of table.tableFields">
+                    {{ tableField.fieldName }}: {{ tableField.field[0] }}
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <p>Available Section list in selected template:</p>
+            <ul *ngIf="selectedObject.sections">
+              <li *ngFor="let section of selectedObject.sections">
+                <ul>
+                  <p>{{section.sectionName}}</p>
+                  <li *ngFor="let sectionField of section.sectionFields">
+                    {{ sectionField.field }}
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </ng-container>
+        </div>
+        <div class="col-md-6" *ngIf="AttributeList">
+          <p>Available Attribute List in Excel Sheet:</p>
+          <ul>
+            <li *ngFor="let attribute of AttributeList">{{attribute}}</li>
+          </ul>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
+</div>
+
+<div class="wrapper-box">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12"> 
+     
+        <mat-table [dataSource]="tableRecords" matSort>
+
+          <ng-container *ngFor="let header of tableTitle" matColumnDef="{{header}}">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> {{header}} </mat-header-cell>
+            <mat-cell *matCellDef="let data"> {{ data[header] }} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+            <mat-cell *matCellDef="let data">
+              <button type="button" class="btn btn-primary btn-sm" style="font-size: 10px; padding: 5px 10px; border-radius: 3px;" (click)="generatePDF(data)">Generate</button>
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="tableTitle.concat('actions')"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: tableTitle.concat('actions');"></mat-row>
+        
+        </mat-table>    
+      </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="recordsPerPage" [pageIndex]="currentPage" (page)="onPageChange($event)"></mat-paginator>
+    </div>
+  </div>
+</div>
+
+

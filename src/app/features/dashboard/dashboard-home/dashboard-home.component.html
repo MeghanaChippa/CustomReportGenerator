@@ -1,0 +1,26 @@
+<mat-card>
+	<p mat-card-title style="margin-left: 20%;">Your saved templates.</p>
+
+	<mat-divider></mat-divider>
+
+
+</mat-card>
+<div class="container">
+  <div class="row" >
+    <div class="col-md-6" *ngFor="let template of reportNames">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{template}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="generatePDF('open',template)">Open</button>
+          <button mat-raised-button color="primary" (click)="generatePDF('download',template)">Download</button>
+          <button mat-raised-button color="primary" (click)="deleteTemplate(template)">Delete</button>
+          <button mat-raised-button color="primary" (click)="generatePDF('edit',template)">Edit</button>
+        </mat-card-actions>
+      </mat-card>
+      <br>
+    </div>
+  </div>
+
+</div>

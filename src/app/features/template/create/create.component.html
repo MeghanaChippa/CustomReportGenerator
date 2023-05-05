@@ -1,0 +1,174 @@
+<mat-card>
+	<p mat-card-title style="margin-left: 20%;">Create your template.</p>
+
+	<mat-divider></mat-divider>
+</mat-card>
+
+  <form #templateForm="ngForm">
+    <div class="container-fluid pt-2 mb-5">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card border-secondary">
+                    <div class="card-body">
+                        <h4 class="card-title">Header Details</h4>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <h6 class="card-title d-flex justify-content-between">Company Name</h6>
+                                    <input type="text" class="form-control" name="name" id="name"
+                                        [(ngModel)]="template.Header.companyName" #CompanyName="ngModel" required>
+                                </div>
+                                <div class="form-group">
+                                    <h6 class="card-title d-flex justify-content-between">Company Address</h6>
+                                    <textarea class="form-control" name="address" id="address" row="10"
+                                        [(ngModel)]="template.Header.address" #Address="ngModel" required></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <h6 class="card-title d-flex justify-content-between">Report Title</h6>
+                                    <input type="text"  class="form-control" name="reportTitle" id="reportTitle" 
+                                        [(ngModel)]="template.Header.reportTitle" #ReportTitle="ngModel" required>
+                                </div>
+                                <div class="form-group">
+                                    <h6 class="card-title d-flex justify-content-between">Company Logo</h6>
+                                    <input type="file" class="form-control-file" (change)="fileChanged($event)" aria-describedby="fileHelpId">
+                                </div>
+                                  <img *ngIf="template.Header.logo" [src]="template.Header.logo" class="img-thumbnail">
+                            </div>
+                         
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card border-secondary mt-2">
+                    <div class="card-body">
+                        <h4 class="card-title d-flex justify-content-between">Add Section <button mat-raised-button color="primary" type="button"
+                                class="btn btn-secondary" (click)="addSetion()">+</button></h4>
+                        <div class="row" *ngFor="let section of template.sections; let i=index">
+
+                                <div class="form-group">
+                                    <h6 class="card-title d-flex justify-content-between">Section Name</h6>
+                                        <input class="form-control" name="section-{{i}}-name" id="section-{{i}}-name" row="3"
+                                        [ngClass]="{'is-invalid': templateForm.submitted && SectionTitle.invalid}"
+                                        [(ngModel)]="section.sectionName" #SectionTitle="ngModel">
+                                </div>
+                               
+    
+                        <div class="row" style="margin-top:5%;">
+                            <div class="form-group">
+                                <h6 class="card-title d-flex justify-content-between">Add Section Field<button mat-raised-button color="primary" type="button"
+                                    class="btn btn-secondary" (click)="addNewSectionField(section)">+</button>
+                                </h6>                                    
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4" *ngFor="let sectionField of section.sectionFields; let j=index">
+                                  <div class="form-group">
+                                    <input type="text" class="form-control" name="sectionFields{{i}}-{{j}}" [(ngModel)]="section.sectionFields[j].field"
+                                      placeholder="eg: Name">
+                                      
+                                  </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                
+                <div class="card border-secondary mt-2">
+                    <div class="card-body">
+                        <h4 class="card-title d-flex justify-content-between">Add Table <button mat-raised-button color="primary" type="button"
+                                class="btn btn-secondary" (click)="addTable()">+</button></h4>
+                        <div class="row" *ngFor="let table of template.tables; let i=index">
+
+                                <div class="form-group">
+                                    <h6 class="card-title d-flex justify-content-between">Table Name</h6>
+                                        <input class="form-control" name="table-{{i}}-name" id="table-{{i}}-name" row="3"
+                                        [ngClass]="{'is-invalid': templateForm.submitted && TableTitle.invalid}"
+                                        [(ngModel)]="table.tableName" #TableTitle="ngModel">
+                                </div>
+                               
+    
+                        <div class="row" style="margin-top:5%;">
+                            <div class="form-group">
+                                <h6 class="card-title d-flex justify-content-between">Add Table Field<button mat-raised-button color="primary" type="button"
+                                    class="btn btn-secondary" (click)="addNewTableField(table)">+</button>
+                                </h6>                                    
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4" *ngFor="let tableField of table.tableFields; let j=index">
+                                  <div class="form-group">
+                                    <input type="text" class="form-control" name="tableFields{{i}}-{{j}}" [(ngModel)]="table.tableFields[j].fieldName"
+                                      placeholder="eg: Name">
+                                      
+                                  </div>
+                                </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                
+
+                <div class="card border-secondary mt-2">
+                    <div class="card-body">
+                        <h4 class="card-title d-flex justify-content-between">Add a text box  <button mat-raised-button color="primary" type="button"
+                            class="btn btn-secondary" (click)="addTextbox()">+</button></h4>
+                    <div class="row" *ngFor="let textbox of template.textboxes; let i=index">
+  
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text"class="form-control" name="TextboxName{{i}}" id="TextboxName"
+                            [(ngModel)]="textbox.Title" #TextboxName="ngModel">
+                        </div>
+                        <div class="form-group">
+                            <label>Body</label>
+                            <textarea class="form-control" name="TextboxBody{{i}}" id="TextboxBody" rows="4"
+                                [(ngModel)]="textbox.Body" #TextboxBody="ngModel"></textarea>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <div class="card border-secondary mt-2">
+                    <div class="card-body">
+                        <h4 class="card-title d-flex justify-content-between">Additional Fields</h4>
+                        <mat-checkbox name="date" [(ngModel)]="template.date" [ngModelOptions]="{standalone: true}" (ngModelChange)="handleCheckboxClick()">Add Date.</mat-checkbox><br>
+                        <mat-checkbox name="digitalSignature" [(ngModel)]="template.digitalSignature" [ngModelOptions]="{standalone: true}" (ngModelChange)="handleCheckboxClick()">Add Digital Signature.</mat-checkbox>
+                    </div>
+                    
+                </div>
+
+  
+            </div>
+            <div class="col-md-3">
+                <button mat-raised-button color="primary" type="button" class="mat mat-secondary mat-lg mat-block" style="margin-top: 10%;"
+                  (click)="templateForm.valid ? generatePDF('download') : ''">
+                  Download Template
+                </button>
+                <br>
+                <button mat-raised-button color="primary" type="button" class="mat mat-secondary mat-lg mat-block" style="margin-top: 10%;"
+                  (click)="templateForm.valid ? generatePDF('print') : ''">
+                  Print Template
+                </button>
+                <br>
+                <button mat-raised-button color="primary" type="submit" class="mat mat-secondary mat-lg mat-block" style="margin-top: 10%;"
+                  (click)="templateForm.valid ? generatePDF() : ''">
+                  Open Template
+                </button>
+                <button mat-raised-button color="primary" type="submit" class="mat mat-secondary mat-lg mat-block" style="margin-top: 10%;"
+                  (click)="templateForm.valid ? generatePDF('save') : ''">
+                  Save in MyTemplates
+                </button>
+            </div>
+              
+        </div>
+    </div>
+  </form>
+  
+  
+  
+  
+  <footer class="fixed-bottom">
+  
+  </footer>
